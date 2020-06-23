@@ -1,0 +1,48 @@
+using System.IO;
+using System.Reflection;
+using System.Threading;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using OpenQA.Selenium;
+using OpenQA.Selenium.Chrome;
+
+namespace Section7
+{
+    [TestClass]
+    public class UnitTest1
+    {
+        [TestMethod]
+        public void TestMethod1()
+        {
+            //Create a driver(using quicker method instead of new ChromeDriver) and use it; 
+            IWebDriver driver = GetChromeDriver();
+            driver.Navigate().GoToUrl("https://cbaaccountingwebapptest.net");//把一个网址让浏览器获取到，并打开
+            driver.Manage().Window.Maximize();
+            //在网页上用驱动器查找相应的元素
+            driver.FindElement(By.XPath("//*[@type='email']")).Clear();
+            driver.FindElement(By.XPath("//*[@type='password']")).Clear();
+
+            driver.FindElement(By.XPath("//*[@type='email']")).SendKeys("guest@guest.com");
+            Thread.Sleep(1000);
+
+            driver.FindElement(By.XPath("//*[@type='password']")).SendKeys("g1111111");
+            Thread.Sleep(1000);
+
+
+            driver.FindElement(By.XPath("//*[@class='btn btn-primary']")).Click();
+            Thread.Sleep(1000);
+
+            //closes all browser windows and ends the WebDriver session.
+            driver.Quit();
+        }
+        //Use IDE to help fill in GetChromeDriver method;
+        //Use ChromeDriver for testing in Google Chrome 
+        private IWebDriver GetChromeDriver()
+        {
+            //Get the name of the directory of the location of the executable;
+            var outPutDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            //Return a new ChromeDriver with the path to the ChromeDriver that we have now: the binary;
+            return new ChromeDriver(outPutDirectory);
+        }
+
+    }
+}
