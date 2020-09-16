@@ -25,10 +25,12 @@ namespace Section7
             IWebElement noUser = driver.FindElement(By.XPath("//*[@type='text']"));
             IWebElement noPassword = driver.FindElement(By.XPath("//*[@type='password']"));
             Actions actionsObj = new Actions(driver);
+            //Move the cursor From the user account to password field
             actionsObj.Click(noUser).Perform();
             actionsObj.Click(noPassword).Perform();
             actionsObj.Click(noUser).Perform();
             Thread.Sleep(1000);
+            //Assert the warning information For each field
             string errorText = driver.FindElement(By.XPath("//*[@id='mat-error-0']")).Text;
             Assert.IsTrue(errorText.Contains("You Must Enter A Value."));
             string errorPw = driver.FindElement(By.XPath("//*[@id='mat-error-1']")).Text;
@@ -51,8 +53,10 @@ namespace Section7
             ///在网页上用驱动器查找相应的元素
 
             driver.FindElement(By.XPath("//*[@type='password']")).Clear();
+            //Input 'q' to password field
             driver.FindElement(By.XPath("//*[@type='password']")).SendKeys("q");
             Thread.Sleep(1000);
+            //Check Login button is unavailable
             Assert.IsFalse(driver.FindElement(By.XPath("//*[@class='mat-raised-button mat-warn']")).Enabled);
             Thread.Sleep(2000);
             //closes all browser windows and ends the WebDriver session.
@@ -67,20 +71,28 @@ namespace Section7
             driver.Manage().Window.Maximize();
             ///在网页上用驱动器查找相应的元素
             driver.FindElement(By.XPath("//*[@type='text']")).Clear();
+            //Input 'guest' into account field
             driver.FindElement(By.XPath("//*[@type='text']")).SendKeys("guest");
+            //Find password field, then click on it
             IWebElement noPassword = driver.FindElement(By.XPath("//*[@type='password']"));
             Actions actionsObj = new Actions(driver);
             actionsObj.Click(noPassword).Perform();
             Thread.Sleep(1000);
-
+            //Identify the altert information Under account field
             string errorText = driver.FindElement(By.XPath("//*[@id='mat-error-0']")).Text;
+            //Assert the warning
             Assert.IsTrue(errorText.Contains("Please Input An Email."));
+            //Assert the login button is unavailable
             IWebElement btnDissabled = driver.FindElement(By.XPath("//*[@class='mat-raised-button mat-warn']"));
             Assert.IsFalse(btnDissabled.Enabled);
 
+            //Try another format of user email To get rid of the warnings
             driver.FindElement(By.XPath("//*[@type='text']")).Clear();
             driver.FindElement(By.XPath("//*[@type='text']")).SendKeys("guest@guest");
+            //Assert the warning is null
+            Assert.IsFalse(driver.PageSource.Contains("Please Input An Email."));
             Thread.Sleep(2000);
+            //Assert the login button is unavailable
             Assert.IsFalse(driver.FindElement(By.XPath("//*[@class='mat-raised-button mat-warn']")).Enabled);
             //closes all browser windows and ends the WebDriver session.
             driver.Quit();
@@ -95,16 +107,17 @@ namespace Section7
             ///在网页上用驱动器查找相应的元素
             driver.FindElement(By.XPath("//*[@type='text']")).Clear();
             driver.FindElement(By.XPath("//*[@type='password']")).Clear();
-
+            //Input a username
             driver.FindElement(By.XPath("//*[@type='text']")).SendKeys("guest@guest.com");
             Thread.Sleep(1000);
-
+            //Input the right password
             driver.FindElement(By.XPath("//*[@type='password']")).SendKeys("q1111111");
             Thread.Sleep(1000);
-
-
+            
+            //Click on the login button
             driver.FindElement(By.XPath("//*[@class='mat-button-wrapper']")).Click();
             Thread.Sleep(2000);
+            //Assert if successfully logged in
             Assert.AreEqual("CBA Invoicing", driver.Title);
             //closes all browser windows and ends the WebDriver session.
             driver.Quit();
@@ -120,14 +133,14 @@ namespace Section7
             ///在网页上用驱动器查找相应的元素
             driver.FindElement(By.XPath("//*[@type='text']")).Clear();
             driver.FindElement(By.XPath("//*[@type='password']")).Clear();
-
+            //Input the right to use name
             driver.FindElement(By.XPath("//*[@type='text']")).SendKeys("guest@guest.com");
             Thread.Sleep(1000);
-
+            //Input the right Password
             driver.FindElement(By.XPath("//*[@type='password']")).SendKeys("g1111111");
             Thread.Sleep(1000);
 
-
+            //Click on the login button
             driver.FindElement(By.XPath("//*[@class='mat-button-wrapper']")).Click();
             Thread.Sleep(2000);
             driver.SwitchTo().Alert().Accept();
@@ -145,17 +158,18 @@ namespace Section7
             ///在网页上用驱动器查找相应的元素
             driver.FindElement(By.XPath("//*[@type='text']")).Clear();
             driver.FindElement(By.XPath("//*[@type='password']")).Clear();
-
+            //Input the wrong username
             driver.FindElement(By.XPath("//*[@type='text']")).SendKeys("4u_bama@163.com");
             Thread.Sleep(1000);
-
+            //Input the password
             driver.FindElement(By.XPath("//*[@type='password']")).SendKeys("g1111111");
             Thread.Sleep(1000);
 
-
+            //Identify the login button
             driver.FindElement(By.XPath("//*[@class='mat-button-wrapper']")).Click();
             Thread.Sleep(2000);
             var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(6));
+            //Pop-up window can not be identified, so just accept it and close it.
             driver.SwitchTo().Alert().Accept();
             //closes all browser windows and ends the WebDriver session.
             driver.Quit();
