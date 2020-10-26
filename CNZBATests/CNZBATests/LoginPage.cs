@@ -18,7 +18,8 @@ namespace CNZBATests
         public IWebElement LoginButton => Driver.FindElement(By.XPath("//*[@class='mat-raised-button mat-button-base mat-warn']"));
         public IWebElement AlertforEmailAddress => Driver.FindElement(By.XPath("//*[@id='mat-error-0']"));
         public IWebElement AlertforPassword => Driver.FindElement(By.XPath("//*[@id='mat-error-1']"));
-
+        public IWebElement LoginToYourAccount => Driver.FindElement(By.XPath("//*[@class='title']"));
+       
         internal void Open()
         {
             Driver.Navigate().GoToUrl("https://cbaaccountingwebapptest.azurewebsites.net");

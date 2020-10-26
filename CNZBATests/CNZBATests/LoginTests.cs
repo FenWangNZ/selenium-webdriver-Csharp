@@ -13,6 +13,7 @@ namespace CNZBATests
     {
         IWebDriver driver;
         LoginPage loginPage;
+        TestUser userInfo;
 
         [TestInitialize]
         public void SetupBeforEverySingleMethod()
@@ -21,6 +22,7 @@ namespace CNZBATests
             loginPage = new LoginPage(driver);
             loginPage.Open();
             driver.Manage().Window.Maximize();
+            userInfo = new TestUser();
         }
 
         [TestCleanup]
@@ -34,7 +36,6 @@ namespace CNZBATests
         [Description("Validate that the user is able to login successfully using validate data")]
         public void Test_1()
         {
-            var userInfo = new TestUser();
             userInfo.EmailAddress = "guest@guest.com";
             userInfo.PassWord = "q1111111";
 
@@ -43,7 +44,7 @@ namespace CNZBATests
         }
 
         [TestMethod]
-        [Description("Validate no input")]
+        [Description("Validate alert if there is no input into email address and password fields")]
         public void Test_0_NoInput()
         {
             loginPage.NoInput();
@@ -53,7 +54,51 @@ namespace CNZBATests
 
         }
 
-        
+        [TestMethod]
+        [Description("Validate that the user will get an alert while only inputting password field ")]
+        public void Test_0_OnlyInputPassword()
+        {
+            userInfo.PassWord = "q1111111";
+            loginPage.PassWord.SendKeys(userInfo.PassWord);
+            loginPage.LoginButton.Click();
+            Assert.IsFalse(loginPage.LoginButton.Enabled);
+        }
+
+        [TestMethod]
+        [Description("Validate that the user will get an alert while only inputting email address field ")]
+        public void Test_0_OnlyInputEmailAddress()
+        {
+            userInfo.EmailAddress = "guest@guest.com";
+            loginPage.EmailAddress.SendKeys(userInfo.EmailAddress);
+            loginPage.LoginButton.Click();
+            Assert.IsFalse(loginPage.LoginButton.Enabled);
+        }
+
+        [TestMethod]
+        [Description("Validate that the user is not able to login successfully using invalid data")]
+        public void Test_0_WrongPassword()
+        {
+            userInfo.EmailAddress = "guest@guest.com";
+            userInfo.PassWord = "guest111";
+
+            loginPage.InputUserInfoAndLogin(userInfo);
+            Thread.Sleep(3000);
+            driver.SwitchTo().Alert().Accept();
+            Assert.AreEqual("Login to Your Account!", loginPage.LoginToYourAccount.Text);
+        }
+
+        [TestMethod]
+        [Description("Validate that the user will get an alert if inputting an inexisting email address")]
+        public void Test_0_InputWrongEmailAddress()
+        {
+            userInfo.EmailAddress = "guest@opeu.com";
+            userInfo.PassWord = "guest111";
+
+            loginPage.InputUserInfoAndLogin(userInfo);
+            Thread.Sleep(3000);
+            driver.SwitchTo().Alert().Accept();
+            Assert.AreEqual("Login to Your Account!", loginPage.LoginToYourAccount.Text);
+        }
 
         private IWebDriver ChromeDriver()
         {
