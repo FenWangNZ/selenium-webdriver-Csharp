@@ -15,11 +15,16 @@
 </PackageReference>
     <PackageReference Include="Selenium.WebDriver" Version="3.141.0" />
     <PackageReference Include="Selenium.Support" Version="3.141.0" />
+    <PackageReference Include="DotNetSeleniumExtras.WaitHelpers" Version="3.11.0" />
   </ItemGroup>
 
   <ItemGroup>
     <None Update="chromedriver">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Pages\" />
+    <Folder Include="Tests\" />
   </ItemGroup>
 </Project>

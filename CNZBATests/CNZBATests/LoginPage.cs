@@ -1,17 +1,14 @@
 ﻿using System;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Interactions;
+using OpenQA.Selenium.Support.UI;
+using ExpectedConditions = SeleniumExtras.WaitHelpers.ExpectedConditions;
 
 namespace CNZBATests
 {
-    internal class LoginPage
+    internal class LoginPage : BasePage
     {
-        public LoginPage(IWebDriver driver)
-        {
-            Driver = driver;
-        }
-
-        public IWebDriver Driver { get; }
+        public LoginPage(IWebDriver driver) : base(driver) { }
 
         public IWebElement EmailAddress => Driver.FindElement(By.XPath("//*[@type='text']"));
         public IWebElement PassWord => Driver.FindElement(By.XPath("//*[@type='password']"));
@@ -30,6 +27,10 @@ namespace CNZBATests
             EmailAddress.SendKeys(user.EmailAddress);
             PassWord.SendKeys(user.PassWord);
             LoginButton.Click();
+            //Thread.Sleep(6000);
+            WebDriverWait wait = new WebDriverWait(Driver, TimeSpan.FromSeconds(6));
+            wait.Until(ExpectedConditions.ElementIsVisible(By.XPath("//*[@class='navbar-text ng-star-inserted']")));
+            
         }
 
         internal void NoInput()

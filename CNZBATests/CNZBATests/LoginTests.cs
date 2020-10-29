@@ -1,46 +1,36 @@
-using System.IO;
-using System.Reflection;
 using System.Threading;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenQA.Selenium;
-using OpenQA.Selenium.Chrome;
 
 namespace CNZBATests
 {
     [TestClass]
     [TestCategory("LoginModule")]
-    public class LoginTests
+    public class LoginTests : BaseTest
     {
-        IWebDriver driver;
         LoginPage loginPage;
         TestUser userInfo;
-
-        [TestInitialize]
-        public void SetupBeforEverySingleMethod()
-        {
-            driver = ChromeDriver();
-            loginPage = new LoginPage(driver);
-            loginPage.Open();
-            driver.Manage().Window.Maximize();
-            userInfo = new TestUser();
-        }
-
-        [TestCleanup]
-        public void CleanupAfterEverySingleMethod()
-        {
-            driver.Close();
-            driver.Quit();
-        }
 
         [TestMethod]
         [Description("Validate that the user is able to login successfully using validate data")]
         public void Test_1()
         {
-            userInfo.EmailAddress = "guest@guest.com";
-            userInfo.PassWord = "q1111111";
+            UserLogin();
+        }
+
+        public void UserLogin()
+        {
+            userInfo = new TestUser
+            {
+                EmailAddress = "guest@guest.com",
+                PassWord = "q1111111"
+            };
+            loginPage = new LoginPage(Driver);
+            loginPage.Open();
+            Driver.Manage().Window.Maximize();
 
             loginPage.InputUserInfoAndLogin(userInfo);
-            Assert.AreEqual("CBA Invoicing", driver.Title);
+            Assert.AreEqual("CBA Invoicing", Driver.Title);
         }
 
         [TestMethod]
@@ -83,7 +73,7 @@ namespace CNZBATests
 
             loginPage.InputUserInfoAndLogin(userInfo);
             Thread.Sleep(3000);
-            driver.SwitchTo().Alert().Accept();
+            Driver.SwitchTo().Alert().Accept();
             Assert.AreEqual("Login to Your Account!", loginPage.LoginToYourAccount.Text);
         }
 
@@ -96,16 +86,9 @@ namespace CNZBATests
 
             loginPage.InputUserInfoAndLogin(userInfo);
             Thread.Sleep(3000);
-            driver.SwitchTo().Alert().Accept();
+            Driver.SwitchTo().Alert().Accept(); 
             Assert.AreEqual("Login to Your Account!", loginPage.LoginToYourAccount.Text);
         }
 
-        private IWebDriver ChromeDriver()
-        {
-            //Get the name of the directory of the location of the executable;
-            var outPutDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            //Return a new ChromeDriver with the path to the ChromeDriver that we have now: the binary;
-            return new ChromeDriver(outPutDirectory);
-        }
     }
 }
