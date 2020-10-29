@@ -12,9 +12,7 @@ namespace CNZBATests
         public InvoiceListsPage(IWebDriver driver) : base(driver) { }
         IReadOnlyList<IWebElement> DefaultLocators => Driver.FindElements(By.XPath("//*[@class='col-6']"));
         IReadOnlyList<IWebElement> ValueUpdatedOnTopRight => Driver.FindElements(By.XPath("//*[@class='col-6']"));
-
-        public IWebElement SearchField => Driver.FindElement(By.XPath("//*[@name='searchString']"));
-
+        
         internal void AssertInvoiceInfoOnInvoiceLists(InvoicePage invoicePage)
         {
             //verify if new added invoice can be listed on invoice tracker page by query this invoice
@@ -23,7 +21,7 @@ namespace CNZBATests
             string newTotalOnTopRight = ValueUpdatedOnTopRight[5].Text;
             Driver.Navigate().GoToUrl(URL.InvoiceListsUrl);
             Thread.Sleep(2000);
-            SearchField.SendKeys(invoiceNumber);
+            invoicePage.SearchField.SendKeys(invoiceNumber);
             //verify the ivoice is the searched one
             Assert.AreEqual(invoiceNumber, invoicePage.InvoiceNumberOfNewAdded.Text);
             Assert.AreEqual(invoicePage.currentDate, invoicePage.InvoiceCreationDateOfNewAdded.Text);

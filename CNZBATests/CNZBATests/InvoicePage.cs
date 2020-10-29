@@ -56,7 +56,7 @@ namespace CNZBATests
         public IWebElement SaveInvoiceButton => Driver.FindElement(By.XPath("//*[@type='submit']"));
         public IWebElement FinalisedAndSendButton => Driver.FindElement(By.XPath("//*[@class='btn btn-primary ng-star-inserted']"));
 
-        
+        public IWebElement SearchField => Driver.FindElement(By.XPath("//*[@name='searchString']"));
         public IWebElement InvoiceNumberOfNewAdded => Driver.FindElement(By.XPath("//*[@class='table table-bordered table-striped table-hover table-light']/tbody/tr[1]/td[1]"));
         public IWebElement InvoiceCreationDateOfNewAdded => Driver.FindElement(By.XPath("//*[@class='table table-bordered table-striped table-hover table-light']/tbody/tr[1]/td[2]"));
         public IWebElement InvoiceClientOfNewAdded => Driver.FindElement(By.XPath("//*[@class='table table-bordered table-striped table-hover table-light']/tbody/tr[1]/td[3]"));
@@ -123,7 +123,7 @@ namespace CNZBATests
             Assert.IsTrue(Columns[0].Enabled);
             actionsObj.Click(DeleteItemButton).Perform();
 
-            Boolean present;
+            bool present;
             try
             {
                 Driver.FindElement(By.XPath("//*[@class='btn btn-outline-danger btn-sm']"));

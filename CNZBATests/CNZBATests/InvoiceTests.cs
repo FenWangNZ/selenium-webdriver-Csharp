@@ -19,7 +19,20 @@ namespace CNZBATests
         [Description("Create a non-zero amount invoice, including testing the 2 hidden buttons")]
         public void CreateNewInvoice()
         {
+            UserLogin();
+            invoicePage = new InvoicePage(Driver);
+            invoicePage.Open();
 
+            invoicePage.AssertDefaultValuesOnInvoiceCreationPage();
+            invoicePage.CreateAnInvoice();
+
+            invoiceListsPage = new InvoiceListsPage(Driver);
+            invoiceListsPage.AssertInvoiceInfoOnInvoiceLists(invoicePage);
+
+        }
+
+        private void UserLogin()
+        {
             userInfo = new TestUser
             {
                 EmailAddress = "guest@guest.com",
@@ -32,20 +45,13 @@ namespace CNZBATests
             loginPage.InputUserInfoAndLogin(userInfo);
 
             Assert.AreEqual("CBA Invoicing", Driver.Title);
-            invoicePage = new InvoicePage(Driver);
-            invoicePage.Open();
-
-            invoicePage.AssertDefaultValuesOnInvoiceCreationPage();
-            invoicePage.CreateAnInvoice();
-
-            invoiceListsPage = new InvoiceListsPage(Driver);
-            invoiceListsPage.AssertInvoiceInfoOnInvoiceLists(invoicePage);
-
         }
+
         [TestMethod]
         [Description("Cancel an Invoice in two ways")]
         public void CancelInvoiceEditing()
         {
+            UserLogin();
             //Go to invoice creation page, click on cancel button
             Driver.Navigate().GoToUrl(URL.NewInvoiceUrl);
             Thread.Sleep(1000);
@@ -88,6 +94,7 @@ namespace CNZBATests
         [Description("Delete an Invoice in two ways")]
         public void DeleteInvoice()
         {
+            UserLogin();
             //Go to invoice lists page, click on delete button
             Driver.Navigate().GoToUrl(URL.InvoiceListsUrl);
             Thread.Sleep(6000);
@@ -158,6 +165,7 @@ namespace CNZBATests
         [Description("Finalise and send an Invoice in two ways")]
         public void FinaliseSendInvoice()
         {
+            UserLogin();
             //Go to invoice lists page
             Driver.Navigate().GoToUrl(URL.InvoiceListsUrl);
             string url_send0 = Driver.Url;
@@ -202,6 +210,7 @@ namespace CNZBATests
         [Description("Download an sent Invoice through pdf icon and open it")]
         public void DownloadPdfinvoice()
         {
+            UserLogin();
             //Go to invoice lists page
             Driver.Navigate().GoToUrl(URL.InvoiceListsUrl);
             Thread.Sleep(6000);
