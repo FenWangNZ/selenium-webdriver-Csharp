@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NLog;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Interactions;
 using OpenQA.Selenium.Support.UI;
@@ -11,6 +12,7 @@ namespace CNZBATests
 {
     internal class InvoicePage : BasePage
     {
+        private static Logger _logger = LogManager.GetCurrentClassLogger();
         public InvoicePage(IWebDriver driver) : base(driver) { }
        
         private const string CNZBA = "ABNZ";
@@ -67,7 +69,7 @@ namespace CNZBATests
         internal void Open()
         {
             Driver.Navigate().GoToUrl(URL.NewInvoiceUrl);
-
+            _logger.Info($"Opened url=>{URL.NewInvoiceUrl}");
             WebDriverWait wait = new WebDriverWait(Driver, TimeSpan.FromSeconds(6));
             wait.Until(ExpectedConditions.ElementToBeClickable(By.XPath("//*[@type='submit']")));
         }
@@ -77,27 +79,35 @@ namespace CNZBATests
             //verify invoice number
             string invoiceNumber = DefaultLocators[1].Text;
             Assert.AreEqual(TotalLength, Convert.ToString(invoiceNumber.Length));
-            string firstFiveDigits = invoiceNumber.Substring(0, 4);
-            string finalFiveDigits = invoiceNumber.Substring(4);
-            Assert.AreEqual(CNZBA, firstFiveDigits);
-            Assert.AreEqual(FinalSix, Convert.ToString(finalFiveDigits.Length));
+            _logger.Info($"Verified the total length of default invoice number=>{invoiceNumber}");
+            string firstFourDigits = invoiceNumber.Substring(0, 4);
+            string finalSixDigits = invoiceNumber.Substring(4);
+            Assert.AreEqual(CNZBA, firstFourDigits);
+            Assert.AreEqual(FinalSix, Convert.ToString(finalSixDigits.Length));
+            _logger.Info($"Verified first four digits of default invoice number=>{firstFourDigits}");
+            _logger.Info($"Verified final six digits of default invoice number=>{finalSixDigits}");
             //verify current date.
-            
+
             Assert.IsTrue(DefaultLocators[3].Text.Contains(currentDate));
+            _logger.Info($"Got current date=>{currentDate}");
+            _logger.Info($"Verified default date on invoice creation page=>{DefaultLocators[3].Text}");
             Thread.Sleep(6000);
             //verify defaut value for totals and GSTs
             string totalAmount1 = DefaultLocators[5].Text;
-            
             string totalAmount2 = Values[1].Text;
+            
             string GST1 = DefaultLocators[7].Text;
             string GST2 = Values[2].Text;
             Assert.AreEqual(ZeroMoney, totalAmount1);
             Assert.AreEqual(totalAmount1, totalAmount2);
+            _logger.Info($"Default Total amount was =>{totalAmount1} and {totalAmount2}");
             Assert.AreEqual(ZeroMoney, GST1);
             Assert.AreEqual(GST1, GST2);
+            _logger.Info($"Default GST amount was =>{GST1} and {GST2}");
             Thread.Sleep(2000);
             //verify the defalt status is New
             Assert.AreEqual(DefaultStatus, DefaultLocators[9].Text);
+            _logger.Info($"Got default status =>{DefaultStatus}");
             Thread.Sleep(2000);
             //verify the due date value is two weeks after current date;
         }
@@ -106,15 +116,23 @@ namespace CNZBATests
         {
             //input client name
             ClientName.SendKeys(clientName);
+            _logger.Info($"Inputed client name =>{clientName}");
             Email.SendKeys(email);
+            _logger.Info($"Inputed Email =>{email}");
             PurchaseOrderNumber.SendKeys(purchaOrderNumber);
-            
+            _logger.Info($"Inputed purcha order number =>{purchaOrderNumber}");
+
             //open add address button and deleted this field then add it again
             AddAddressButton.Click();
+            _logger.Info($"Address button was added");
             RemoveAddressButton.Click();
+            _logger.Info($"Address button was removed");
             Assert.IsTrue(AddAddressButton.Enabled);
+            _logger.Info($"Address button was removed successfully");
             AddAddressButton.Click();
+            _logger.Info($"Address button was added again");
             ClientContact.SendKeys(clientContact);
+            _logger.Info($"Inputed clinet contact =>{clientContact}");
 
             //open add item button and deleted this field then add it again
             Items[0].Click();

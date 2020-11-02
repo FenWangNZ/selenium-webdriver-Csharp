@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.Threading;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NLog;
 using OpenQA.Selenium;
 
 namespace CNZBATests
 {
     internal class InvoiceListsPage : BasePage
     {
-
+        private static Logger _logger = LogManager.GetCurrentClassLogger();
         public InvoiceListsPage(IWebDriver driver) : base(driver) { }
         IReadOnlyList<IWebElement> DefaultLocators => Driver.FindElements(By.XPath("//*[@class='col-6']"));
         IReadOnlyList<IWebElement> ValueUpdatedOnTopRight => Driver.FindElements(By.XPath("//*[@class='col-6']"));
