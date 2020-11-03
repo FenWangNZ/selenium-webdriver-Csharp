@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using AventStack.ExtentReports;
 using System.Threading;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NLog;
@@ -33,7 +34,7 @@ namespace CNZBATests
         string quantity2 = "40";
         string unitPrice2 = "20";
 
-        public string currentDate = DateTime.Today.ToString("d/MM/yyyy");
+        public string currentDate = DateTime.Today.ToString("dd/MM/yyyy");
 
         IReadOnlyList<IWebElement> DefaultLocators => Driver.FindElements(By.XPath("//*[@class='col-6']"));
         IReadOnlyList<IWebElement> Values => Driver.FindElements(By.XPath("//*[@class='col-2 text-right']"));
@@ -79,18 +80,28 @@ namespace CNZBATests
             //verify invoice number
             string invoiceNumber = DefaultLocators[1].Text;
             Assert.AreEqual(TotalLength, Convert.ToString(invoiceNumber.Length));
-            _logger.Info($"Verified the total length of default invoice number=>{invoiceNumber}");
+            Reporter.LogTestStepForBugLogger(Status.Info,
+                $"Verified the total length of default invoice number=>{invoiceNumber}");
+            //_logger.Info($"Verified the total length of default invoice number=>{invoiceNumber}");
             string firstFourDigits = invoiceNumber.Substring(0, 4);
             string finalSixDigits = invoiceNumber.Substring(4);
             Assert.AreEqual(CNZBA, firstFourDigits);
             Assert.AreEqual(FinalSix, Convert.ToString(finalSixDigits.Length));
-            _logger.Info($"Verified first four digits of default invoice number=>{firstFourDigits}");
-            _logger.Info($"Verified final six digits of default invoice number=>{finalSixDigits}");
+            Reporter.LogTestStepForBugLogger(Status.Info,
+                $"Verified first four digits of default invoice number=>{firstFourDigits}");
+            //_logger.Info($"Verified first four digits of default invoice number=>{firstFourDigits}");
+            Reporter.LogTestStepForBugLogger(Status.Info,
+                $"Verified final six digits of default invoice number=>{finalSixDigits}");
+            //_logger.Info($"Verified final six digits of default invoice number=>{finalSixDigits}");
             //verify current date.
 
             Assert.IsTrue(DefaultLocators[3].Text.Contains(currentDate));
-            _logger.Info($"Got current date=>{currentDate}");
-            _logger.Info($"Verified default date on invoice creation page=>{DefaultLocators[3].Text}");
+            Reporter.LogTestStepForBugLogger(Status.Info,
+                $"Got current date=>{currentDate}");
+            //_logger.Info($"Got current date=>{currentDate}");
+            Reporter.LogTestStepForBugLogger(Status.Info,
+                $"Verified default date on invoice creation page=>{DefaultLocators[3].Text}");
+            //_logger.Info($"Verified default date on invoice creation page=>{DefaultLocators[3].Text}");
             Thread.Sleep(6000);
             //verify defaut value for totals and GSTs
             string totalAmount1 = DefaultLocators[5].Text;
@@ -100,14 +111,20 @@ namespace CNZBATests
             string GST2 = Values[2].Text;
             Assert.AreEqual(ZeroMoney, totalAmount1);
             Assert.AreEqual(totalAmount1, totalAmount2);
-            _logger.Info($"Default Total amount was =>{totalAmount1} and {totalAmount2}");
+            Reporter.LogTestStepForBugLogger(Status.Info,
+                $"Default Total amount was =>{totalAmount1} and {totalAmount2}");
+            //_logger.Info($"Default Total amount was =>{totalAmount1} and {totalAmount2}");
             Assert.AreEqual(ZeroMoney, GST1);
             Assert.AreEqual(GST1, GST2);
-            _logger.Info($"Default GST amount was =>{GST1} and {GST2}");
+            Reporter.LogTestStepForBugLogger(Status.Info,
+                $"Default GST amount was =>{GST1} and {GST2}");
+            //_logger.Info($"Default GST amount was =>{GST1} and {GST2}");
             Thread.Sleep(2000);
             //verify the defalt status is New
             Assert.AreEqual(DefaultStatus, DefaultLocators[9].Text);
-            _logger.Info($"Got default status =>{DefaultStatus}");
+            Reporter.LogTestStepForBugLogger(Status.Info,
+                $"Got default status =>{DefaultStatus}");
+            //_logger.Info($"Got default status =>{DefaultStatus}");
             Thread.Sleep(2000);
             //verify the due date value is two weeks after current date;
         }
@@ -116,23 +133,34 @@ namespace CNZBATests
         {
             //input client name
             ClientName.SendKeys(clientName);
-            _logger.Info($"Inputed client name =>{clientName}");
+            Reporter.LogTestStepForBugLogger(Status.Info,
+                $"Inputed client name =>{clientName}");
+            //_logger.Info($"Inputed client name =>{clientName}");
             Email.SendKeys(email);
-            _logger.Info($"Inputed Email =>{email}");
+            Reporter.LogTestStepForBugLogger(Status.Info,
+                $"Inputed Email =>{email}");
+            //_logger.Info($"Inputed Email =>{email}");
             PurchaseOrderNumber.SendKeys(purchaOrderNumber);
-            _logger.Info($"Inputed purcha order number =>{purchaOrderNumber}");
+            Reporter.LogTestStepForBugLogger(Status.Info,
+                $"Inputed purcha order number =>{purchaOrderNumber}");
+            //_logger.Info($"Inputed purcha order number =>{purchaOrderNumber}");
 
             //open add address button and deleted this field then add it again
             AddAddressButton.Click();
-            _logger.Info($"Address button was added");
+            Reporter.LogTestStepForBugLogger(Status.Info, $"Address button was added");
+            //_logger.Info($"Address button was added");
             RemoveAddressButton.Click();
-            _logger.Info($"Address button was removed");
+            Reporter.LogTestStepForBugLogger(Status.Info, $"Address button was removed");
+            //_logger.Info($"Address button was removed");
             Assert.IsTrue(AddAddressButton.Enabled);
-            _logger.Info($"Address button was removed successfully");
+            Reporter.LogTestStepForBugLogger(Status.Info, $"Address button was removed successfully");
+            //_logger.Info($"Address button was removed successfully");
             AddAddressButton.Click();
-            _logger.Info($"Address button was added again");
+            Reporter.LogTestStepForBugLogger(Status.Info, $"Address button was added again");
+            //_logger.Info($"Address button was added again");
             ClientContact.SendKeys(clientContact);
-            _logger.Info($"Inputed clinet contact =>{clientContact}");
+            Reporter.LogTestStepForBugLogger(Status.Info, $"Inputed clinet contact =>{clientContact}");
+            //_logger.Info($"Inputed clinet contact =>{clientContact}");
 
             //open add item button and deleted this field then add it again
             Items[0].Click();

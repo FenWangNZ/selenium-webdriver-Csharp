@@ -3,7 +3,8 @@ using System.IO;
 using System.Threading;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenQA.Selenium;
-
+using OpenQA.Selenium.Support.UI;
+using ExpectedConditions = SeleniumExtras.WaitHelpers.ExpectedConditions;
 namespace CNZBATests
 {
     [TestClass]
@@ -43,7 +44,8 @@ namespace CNZBATests
             loginPage.Open();
             Driver.Manage().Window.Maximize();
             loginPage.InputUserInfoAndLogin(userInfo);
-
+            WebDriverWait wait = new WebDriverWait(Driver, TimeSpan.FromSeconds(6));
+            wait.Until(ExpectedConditions.ElementIsVisible(By.XPath("//*[@class='navbar-text ng-star-inserted']")));
             Assert.AreEqual("CBA Invoicing", Driver.Title);
         }
 

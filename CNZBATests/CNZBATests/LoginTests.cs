@@ -45,8 +45,8 @@ namespace CNZBATests
             loginPage.Open();
             loginPage.NoInput();
             
-            Assert.IsTrue(loginPage.AlertforEmailAddress.Text.Contains("You Must Enter A Value."));
-            Assert.IsTrue(loginPage.AlertforPassword.Text.Contains("You Must Enter A Value."));
+            Assert.IsTrue(loginPage.AlertforEmailAddress.Text.Contains("You must enter a value."));
+            Assert.IsTrue(loginPage.AlertforPassword.Text.Contains("You must enter a value."));
             Assert.IsFalse(loginPage.LoginButton.Enabled);
 
         }

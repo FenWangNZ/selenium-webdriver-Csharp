@@ -18,6 +18,8 @@
     <PackageReference Include="DotNetSeleniumExtras.WaitHelpers" Version="3.11.0" />
     <PackageReference Include="NLog" Version="4.7.5" />
     <PackageReference Include="NLog.Config" Version="4.7.5" />
+    <PackageReference Include="ExtentReports" Version="4.1.0" />
+    <PackageReference Include="Reporter" Version="1.0.2" />
   </ItemGroup>
 
   <ItemGroup>
